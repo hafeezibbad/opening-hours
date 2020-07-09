@@ -1,0 +1,4 @@
+Stage: "dev"
+ServerPort: 3500
+EndpointBaseUrl: "http://localhost:3500"  # Use the same ServerPort number as above
+Debug: true
