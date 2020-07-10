@@ -6,7 +6,8 @@ from flask import Flask, g, request
 from src.lib.configuration.utils import load_configuration_from_yaml_file
 from src.lib.flask.http_header_helper import FlaskHttpHeaderHelper
 from src.lib.logging.utils import get_flask_details_for_log, setup_logging, LOGGING
-from src.routes.status_api import status_api, STATUS_API_PREFIX
+from src.app.routes.opening_hours import opening_hours_api, OPENING_HOURS_API_PREFIX
+from src.app.routes.status_api import status_api, STATUS_API_PREFIX
 
 
 # pylint: disable=invalid-name
@@ -15,6 +16,7 @@ app = Flask(__name__)
 app_config = load_configuration_from_yaml_file(os.environ['APP_CONFIG_FILE'])
 # Register blueprints
 app.register_blueprint(status_api, url_prefix=STATUS_API_PREFIX)
+app.register_blueprint(opening_hours_api, url_prefix=OPENING_HOURS_API_PREFIX)
 
 
 @app.before_request

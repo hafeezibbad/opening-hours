@@ -2,14 +2,15 @@ import os
 import unittest
 
 # pylint: disable=no-name-in-module
+from tests.fixtures.common import REQUEST_ID_STARTS_WITH, REQUEST_ID_LENGTH
 from tests.unit.configuration.config_test_utils import MOCK_CONFIGURATION_OBJ, MOCK_OS_ENVIRON
 
 
-with \
-        unittest.mock.patch(
-            'src.lib.configuration.utils.load_configuration_from_yaml_file', return_value=MOCK_CONFIGURATION_OBJ), \
-        unittest.mock.patch.dict(os.environ, MOCK_OS_ENVIRON):
-    from src.flask_app import app
+with unittest.mock.patch.dict(os.environ, MOCK_OS_ENVIRON):
+    with unittest.mock.patch(
+            'src.lib.configuration.utils.load_configuration_from_yaml_file', return_value=MOCK_CONFIGURATION_OBJ
+    ):
+        from src.flask_app import app
 
 
 def client():
@@ -35,10 +36,6 @@ def method_will_raise_exception(mock_method, exception_type=OSError):
 
 def exception_type_should_be_valid(msg_types):
     assert 'exception' in msg_types
-
-
-REQUEST_ID_STARTS_WITH = '0000-'
-REQUEST_ID_LENGTH = 36
 
 
 def request_id_must_be_valid(request_id):

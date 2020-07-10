@@ -1,10 +1,11 @@
 import json
 from abc import ABC, abstractmethod
-from typing import Type
+from typing import Type, Dict
 
 from pydantic import ValidationError
 
-from src.app.models import ApiError, Model
+from src.app.models.common import Model
+from src.app.models.errors import ApiError
 
 
 class RequestDataParserABC(ABC):
@@ -37,14 +38,27 @@ class RequestDataParser(RequestDataParserABC):
     def get_model(self) -> Type[Model]:
         raise NotImplementedError
 
-    def _handle_pydantic_validation_error(self, validation_error: ValidationError):
+    def _handle_pydantic_validation_error(
+            self,
+            validation_error: ValidationError,
+            overridden_field_names: Dict[str, str]
+    ) -> ApiError:
         errors = []
         errors_dict = json.loads(validation_error.json())
+
         for error in errors_dict:
             status = 400  # Data validation failure: 400 Bad Request
+
             field_name = error['loc'][0]
+            if field_name in overridden_field_names:
+                field_name = overridden_field_names.get(field_name)
+
             error_title = 'Input validation failed'
-            error_detail = 'Invalid data for {field_name}'.format(field_name=field_name)
+            if error.get('type', '').lower() == 'value_error':
+                error_detail = error['msg']
+            else:
+                error_detail = 'Invalid data for {field_name}'.format(field_name=field_name)
+
             api_error_dict = {
                 'status': status,
                 'source': {

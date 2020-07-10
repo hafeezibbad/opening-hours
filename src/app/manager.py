@@ -2,16 +2,25 @@ import json
 from json.decoder import JSONDecodeError
 from typing import Optional, Type, Union
 
-from src.app.errors import AppApiError, AppErrorType, AppSimpleError
-from src.app.models import Model, Status
+from src.app.errors import AppErrorType, AppSimpleError, AppApiError
+from src.app.models.common import Model
+from src.app.models.status import Status
 
-from src.request_parser.data_parser import RequestDataParser
-from src.service.health_check import HealthCheckService
+from src.app.request_parser.data_parser import RequestDataParser
+from src.app.request_parser.opening_hours_data_parser import OpeningHoursDataParser
+from src.app.service.health_check import HealthCheckService
+from src.app.service.opening_hours import OpeningHoursService
 
 
 class AppManager:
     def __init__(self, requester_ip: Optional[str] = None):
         self.requester_ip = requester_ip
+        self.opening_hours_service = OpeningHoursService()
+
+    def get_human_readable_opening_hours(self, request_data: dict) -> str:
+        opening_hours = self.__parse_request_data(parser=OpeningHoursDataParser, request_data=request_data)
+
+        return self.opening_hours_service.get_human_readable_opening_hours(opening_hours=opening_hours)
 
     def __parse_request_data(self, parser: Type[RequestDataParser], request_data: dict) -> Type[Model]:
         req_parser = parser(request_data=request_data)

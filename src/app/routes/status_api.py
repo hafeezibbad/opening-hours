@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 
-from src.lib.errors.exceptions import handle_and_log_unknown_exception
+from src.lib.errors.exceptions import handle_and_log_service_exception
 from src.lib.response.utils import create_response_and_log
-from src.app.models import Status
+from src.app.models.status import Status
 
-from src.routes.common import create_app_manager
+from src.app.routes.common import create_app_manager
 
 # pylint: disable=invalid-name
 status_api = Blueprint('status', __name__)
@@ -26,4 +26,4 @@ def get_status():
         )
 
     except BaseException as ex:
-        return handle_and_log_unknown_exception(ex, message='Unknown exception')
+        return handle_and_log_service_exception(ex, message='Status check failed')

@@ -1,45 +1,71 @@
-from src.app.models import ApiError
+from typing import Union, Tuple
+
+from src.app.models.errors import ApiError
 
 
 class AppErrorType:
     # internal error code, HTTP status code, log event name
     NO_ERROR = (0, 200, 'OK')
     INTERNAL_SERVER_ERROR = (1, 500, 'INTERNAL_SERVER_ERROR')
-    SONG_NOT_FOUND = (2, 404, 'SONG_NOT_FOUND')
-    SONG_ALREADY_EXISTS = (3, 409, 'SONG_ALREADY_EXISTS')
-    SONG_DATA_INVALID = (4, 400, 'INVALID_SONG_DATA')
-    SERVICE_UNAVAILABLE_ERROR = (5, 503, 'SERVICE_UNAVAILABLE_ERROR')
-    REQUEST_BODY_EMPTY = (6, 400, 'REQUEST_BODY_EMPTY')
-    REQUEST_BODY_INVALID_JSON = (7, 400, 'REQUEST_BODY_INVALID_JSON')
-    DATA_RETRIEVAL_FAILED = (8, 503, 'DATA_RETRIEVAL_FAILED')
-    INVALID_REQUEST_DATA = (9, 400, 'INVALID_REQUEST_DATA')
-    UPDATE_FAILED_VERSION_MISMATCH = (10, 412, 'UPDATE_FAILED_MISMATCH_VERSION')
-    DB_PERSISTENCE_ERROR = (11, 503, 'DB_PERSISTENCE_ERROR')
-    READ_FAILED_VERSION_MISMATCH = (12, 412, 'READ_FAILED_MISMATCH_VERSION')
+    DATA_PARSING_FAILED = (2, 500, 'DATA_PARSING_FAILED')
+    SERVICE_UNAVAILABLE_ERROR = (3, 503, 'SERVICE_UNAVAILABLE_ERROR')
+    REQUEST_BODY_EMPTY = (4, 400, 'REQUEST_BODY_EMPTY')
+    REQUEST_BODY_INVALID_JSON = (5, 400, 'REQUEST_BODY_INVALID_JSON')
+    DATA_RETRIEVAL_FAILED = (6, 503, 'DATA_RETRIEVAL_FAILED')
+    INVALID_REQUEST_DATA = (7, 400, 'INVALID_REQUEST_DATA')
+    CANNOT_PARSE_OPENING_HOURS = (8, 400, 'CANNOT_PARSE_OPENING_HOURS')
 
 
 class AppError(Exception):
-    code = None
-    http_status = None
-    event_name = None
+    code: Tuple = None
+    http_status: int = None
+    event_name: str = None
 
-    def __init__(self, code):
+    def __init__(self, code: Tuple) -> None:
         self.code, self.http_status, self.event_name = code
 
 
 class AppSimpleError(AppError):
     """For simple errors where message and status code is enough"""
-    message = None
+    message: str = None
 
-    def __init__(self, code, message):
+    def __init__(self, code: Tuple, message: str) -> None:
         super(AppSimpleError, self).__init__(code)
         self.message = message
 
 
 class AppApiError(AppError):
     """For more complex API errors raised from validation failures"""
-    api_error = None
+    api_error: ApiError = None
 
-    def __init__(self, code, api_error: ApiError):
+    def __init__(self, code: Tuple, api_error: ApiError) -> None:
         super(AppApiError, self).__init__(code)
         self.api_error = api_error
+
+
+class DataParsingError(AppError):
+    def __init__(
+            self,
+            title: str,
+            detail: str,
+            source: Union[list, dict],
+            code: Tuple = AppErrorType.CANNOT_PARSE_OPENING_HOURS
+    ) -> None:
+        super(DataParsingError, self).__init__(code)
+        self.title = title
+        self.detail = detail
+        self.source = source
+
+    def __repr__(self):
+        return self.detail
+
+    def to_json(self):
+        return {
+            'errors': [
+                {
+                    'title': self.title,
+                    'detail': self.detail,
+                    'source': self.source
+                }
+            ]
+        }

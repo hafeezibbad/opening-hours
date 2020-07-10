@@ -30,10 +30,11 @@ def get_service_status_request(
     )
 
 
-def post_song_rating_request(
+def post_opening_hours_request(
         base_url: str = ENDPOINT_BASE_URL,
         request_id: Optional[constr(regex=REQUEST_ID_PATTERN)] = None,
         user_agent: Optional[str] = TEST_USER_AGENT,
+        request_data: Optional[Dict[str, Any]] = None,
         params: Optional[Dict[str, Any]] = None
 ):
 
@@ -47,6 +48,7 @@ def post_song_rating_request(
 
     return requester.make_request(
         method='POST',
-        path='/api/v1/songs/opening-hours',
+        path='/api/v1/opening-hours',
+        json=request_data,
         params=params
     )

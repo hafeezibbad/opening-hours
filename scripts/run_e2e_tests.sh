@@ -18,4 +18,4 @@ fi
 
 echo "Running E2E test with endpoint base url $ENDPOINT_BASE_URL"
 
-pytest $TESTS_DIR/e2e --no-cov -v $TEST_TAG_PARAM
+pytest $TESTS_DIR/e2e/test_opening_hours.py --no-cov -v $TEST_TAG_PARAM
