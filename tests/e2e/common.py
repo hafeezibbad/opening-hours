@@ -19,5 +19,3 @@ def invalidate_song_data(song_data: dict, invalid_field_names: List[str], invali
         invalid_song_data[invalid_field_names[i]] = invalid_values[i]
 
     return invalid_song_data
-
-

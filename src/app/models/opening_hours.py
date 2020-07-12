@@ -2,7 +2,7 @@ import operator
 import re
 from typing import List, Optional, Dict, Any, Union
 
-from pydantic import conint, ValidationError  # pylint: disable=no-name-in-module
+from pydantic import conint  # pylint: disable=no-name-in-module
 
 from src.app.time_formatter import TimeFormatter
 
@@ -25,7 +25,7 @@ class OpeningStatusStr(str):
         if not status_type.strip():
             raise ValueError('Empty string provided as status')
 
-        if re.match(pattern=OPENING_STATUS_REGEX,  string=status_type.strip(), flags=re.IGNORECASE) is None:
+        if re.match(pattern=OPENING_STATUS_REGEX, string=status_type.strip(), flags=re.IGNORECASE) is None:
             raise ValueError('Invalid `type`. Choices are `{}`'.format(', '.join(STATUS_CHOICES)))
 
         return status_type
@@ -55,32 +55,31 @@ class ValidDayTimings(list):
         if not all([isinstance(each, TimeEntry) for each in timings]):
             raise ValueError('Invalid items in timings')
 
-        value = sorted(timings, key=operator.attrgetter("value"))
+        timings = sorted(timings, key=operator.attrgetter("value"))
 
         if ValidDayTimings.check_duplicate_consecutive_events_exist(timings) is True:
             raise DataParsingError(
                 title="Invalid event sequence",
                 detail="Overlapping intervals or consecutive events of same `type`",
-                source=[timing.to_dict() for timing in timings]
+                source=[timing.dict() for timing in timings]
             )
 
         if ValidDayTimings.check_different_events_at_same_time_exist(timings) is True:
             raise DataParsingError(
                 title="Invalid event sequence",
                 detail='Different events specified with same `value`',
-                source=[timing.to_dict() for timing in timings]
+                source=[timing.dict() for timing in timings]
             )
 
-        return value
+        return timings
 
     @classmethod
     def check_duplicate_consecutive_events_exist(cls, timings: List[TimeEntry]) -> bool:
-        previous_timing_event: Optional[OpeningStatusStr] = None
+        previous_timing_event: Optional[str] = None
         for each in timings:
             if each.status == previous_timing_event:
                 return True
-            else:
-                previous_timing_event = each.status
+            previous_timing_event = each.status
 
         return False
 
@@ -100,12 +99,6 @@ class ValidDayTimings(list):
 class DayTimings(Model):
     weekday: WeekdayStr = None
     timings: Optional[ValidDayTimings] = None
-
-    # def dict(self, *args, **kwargs) -> Dict[str, Any]:
-    #     if self.timings is not None:
-    #         return {self.weekday: [timing.dict() for timing in self.timings]}
-    #
-    #     return {self.weekday: []}
 
 
 class OpeningHours(Model):

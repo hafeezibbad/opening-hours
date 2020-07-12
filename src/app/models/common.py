@@ -1,8 +1,6 @@
-from typing import Optional, Dict, Any
+from typing import Optional, Dict
 
 from pydantic import BaseModel
-
-from src.app.time_formatter import TimeFormatter
 
 
 class Model(BaseModel):
@@ -19,4 +17,3 @@ class Model(BaseModel):
             return cls(**init, **kwargs)  # type: ignore
 
         raise ValueError(init)
-

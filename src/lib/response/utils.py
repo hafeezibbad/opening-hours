@@ -9,7 +9,7 @@ from src.lib.logging.utils import LOGGING
 
 
 class CustomJsonEncoder(json.JSONEncoder):
-    def default(self, obj):
+    def default(self, obj):  # pylint: disable=W0221, E0202
         if isinstance(obj, (TimeEntry, DayTimings)):
             return obj.dict()
 

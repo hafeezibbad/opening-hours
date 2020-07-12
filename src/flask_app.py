@@ -29,14 +29,14 @@ def before_request():       # pylint: disable=inconsistent-return-statements
     flask_details = get_flask_details_for_log()
     http_helper = FlaskHttpHeaderHelper()
     g.request_id = http_helper.get_request_id(request)
-    tx_details = {'request_id': g.request_id}
-    initial_values = {**flask_details, **tx_details}
+    request_id_details = {'request_id': g.request_id}
+    initial_values = {**flask_details, **request_id_details}
     LOGGING.new(**initial_values)
 
 
 @app.after_request
 def after_request(response):
     LOGGING.info('REQUEST_EXECUTION_TIME', execution_time=time.time() - g.start_time)
-    response.headers['X-Request-Id'] = g.request_id
+    response.headers['X-REQUEST-ID'] = g.request_id
 
     return response

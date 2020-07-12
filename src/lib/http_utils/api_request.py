@@ -106,10 +106,6 @@ class E2EApiRequest(ApiRequest):
             params=params
         )
 
-        print('*' * 80)
-        print(response_dict)
-        print('*' * 80)
-
         return self.expected_response(response_dict)
 
 

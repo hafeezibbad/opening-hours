@@ -19,3 +19,21 @@ UNIX_TIMESTAMP_TO_HUMAN_READABLE = [
     (1594490400.0, "6 PM"),
     (1594461600.0, "10 AM")
 ]
+
+
+FORMATTED_TIME_RANGES = [
+    ("5 AM", "8 AM", "5 AM - 8 AM"),
+    ("5 AM", "", "5 AM - ")
+]
+
+
+FORMATTED_TIMES_FOR_DAY = [
+    # Day names are case-insensitive example: Lower case
+    ({'friday': ['6 pm - 1 am'], 'saturday': []}, "\n".join(["Friday: 6 PM - 1 AM", "Saturday: Closed"])),
+    # Day names are case-insensitive example: Upper case
+    ({'FRIDAY': ['6 PM - 1 AM'], 'SATURDAY': []}, "\n".join(["Friday: 6 PM - 1 AM", "Saturday: Closed"])),
+    # Day names are case-insensitive example: Camel case
+    ({'FriDay': ['6 Pm - 1 Am'], 'SaturDay': []}, "\n".join(["Friday: 6 PM - 1 AM", "Saturday: Closed"])),
+    # Multiple timings per day
+    ({'friday': ['6 am - 8 am', '6pm - 9pm']}, "Friday: 6 AM - 8 AM, 6PM - 9PM")
+]

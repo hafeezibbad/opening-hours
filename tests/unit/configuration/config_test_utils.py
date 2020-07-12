@@ -1,6 +1,4 @@
 import os
-from collections import defaultdict
-from unittest.mock import patch
 
 from munch import DefaultMunch
 

@@ -23,14 +23,13 @@ class TimeFormatter:
     @staticmethod
     def get_formatted_times_for_days(timing_data: Dict[str, str]) -> str:
         times = []
-        for weekday, timing in timing_data.items():
-            if timing:
+        for weekday, timings in timing_data.items():
+            if timings:
                 times.append("{day}: {timings}".format(
                     day=weekday.title(),
-                    timings=', '.join(timing)
+                    timings=', '.join([timing.upper() for timing in timings]).strip()
                 ))
             else:
                 times.append("{day}: Closed".format(day=weekday.title()))
 
         return "\n".join(times)
-

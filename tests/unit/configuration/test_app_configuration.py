@@ -1,5 +1,3 @@
-import copy
-import os
 import unittest
 
 # pylint: disable=E0611
@@ -16,4 +14,3 @@ class AppConfigurationTests(unittest.TestCase):
         self.assertEqual(configuration.Stage, YAML_CONFIG_DATA['Stage'])
         self.assertEqual(configuration.ServerPort, YAML_CONFIG_DATA['ServerPort'])
         self.assertTrue(configuration.Debug)
-

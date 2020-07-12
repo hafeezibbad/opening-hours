@@ -1,4 +1,3 @@
-import json
 from typing import Optional
 import sys
 import traceback
@@ -6,7 +5,6 @@ import traceback
 from flask import request, g
 
 from src.app.errors import DataParsingError
-from src.app.models.opening_hours import TimeEntry, DayTimings, OpeningHours
 from src.lib.logging.utils import LOGGING
 from src.lib.response.utils import create_json_response
 from src.app.models.errors import ApiError

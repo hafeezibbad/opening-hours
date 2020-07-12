@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import conint, constr, Extra  # pylint: disable=no-name-in-module
 from typing_extensions import Literal
 

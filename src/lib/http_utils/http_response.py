@@ -118,7 +118,7 @@ class HttpResponse(ABC):
 
     def text_data_is(self, expected_response_text: str):
         self._parse_body()
-        assert self.body == expected_response_text, '{}\n\n{}'.format(self.body, expected_response_text)
+        assert self.body == expected_response_text
 
     def body_is_empty(self):
         self._parse_body()
