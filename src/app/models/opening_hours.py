@@ -4,12 +4,12 @@ from typing import List, Optional, Dict, Any, Union
 
 from pydantic import conint  # pylint: disable=no-name-in-module
 
-from src.app.time_formatter import TimeFormatter
+from src.app.opening_hours_app.errors import DataParsingError
+from src.app.utils.time_formatter import TimeFormatter
 
 from .common import Model
 from .constants import OPENING_STATUS_REGEX, STATUS_OPEN, STATUS_CLOSE, STATUS_CHOICES
 from .validators import WeekdayStr, strings_are_equal, strings_are_not_equal
-from ..errors import DataParsingError
 
 
 class OpeningStatusStr(str):

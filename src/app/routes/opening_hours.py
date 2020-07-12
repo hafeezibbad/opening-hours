@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 
-from src.app.errors import AppError, DataParsingError
+from src.app.opening_hours_app.errors import AppError, DataParsingError
 from src.lib.errors.exceptions import handle_and_log_service_exception, handle_and_log_unknown_exception
 from src.lib.logging.utils import log_request
 from src.lib.response.utils import create_response_and_log

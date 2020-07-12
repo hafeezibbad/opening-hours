@@ -349,64 +349,29 @@ OPENING_TIMES_WITH_SINGLE_VALIDATION_ERROR = [
     )
 ]
 
-INVALID_OPENING_TIMES = [
-    (
-        {
-            "friday": [
-                {
-                    "type": "open",
-                    "value": 64800
-                }, {
-                    "type": "close",
-                    "value": 64800
-                }
-            ]
-        },
-        # Two different events can not be on the same time.
-    ),
-    (
-        {
-            "friday": [
-                {
-                    "type": "open",
-                    "value": 64800
-                }
-            ],
-            "Saturday": [
-                {
-                    "type": "open",
-                    "value": 64800
-                }, {
-                    "type": "close",
-                    "value": 64800
-                }
-            ]
-        },
-        # Previous day has no closing times.
-    ),
-    (
-        {
-            "friday": [
-                {
-                    "type": "open",
-                    "value": 64800
-                }, {
-                    "type": "close",
-                    "value": 64800
-                }
-            ],
-            "Saturday": [
-                {
-                    "type": "close",
-                    "value": 64800
-                }
-            ]
-        },
-        # Closing time on Saturday has no opening time.
-    )
-]
-
 OPENING_HOURS_WITH_NO_CLOSING_TIME = [
+    (
+        {
+            "monday": [
+                {
+                    "type": "open",
+                    "value": 32400
+                }
+            ],
+            "tuesday": [
+                {
+                    "type": "open",
+                    "value": 14400
+                },
+                {
+                    "type": "close",
+                    "value": 32000
+                }
+            ]
+        },
+        "Missing closing times",
+        "`Monday: 9 AM` has no closing time"
+    ),
     (
         {
             "tuesday": [

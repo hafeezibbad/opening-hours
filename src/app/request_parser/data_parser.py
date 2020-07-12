@@ -1,6 +1,6 @@
 import json
 from abc import ABC, abstractmethod
-from typing import Type, Dict
+from typing import Type, Dict, List, Optional, Any
 
 from pydantic import ValidationError
 
@@ -14,7 +14,7 @@ class RequestDataParserABC(ABC):
         pass
 
     @abstractmethod
-    def get_api_error(self) -> ApiError:
+    def get_api_error(self) -> Optional[ApiError]:
         pass
 
     @abstractmethod
@@ -24,12 +24,12 @@ class RequestDataParserABC(ABC):
 
 class RequestDataParser(RequestDataParserABC):
     def __init__(self, request_data: dict) -> None:
-        self.errors = []
+        self.errors: List[Dict[str, Any]] = []
         self.model = None
         self.api_error = None
         self.request_data = request_data
 
-    def get_api_error(self) -> ApiError:
+    def get_api_error(self) -> Optional[ApiError]:
         return self.api_error
 
     def is_valid(self):

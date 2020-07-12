@@ -2,7 +2,7 @@ import json
 from json.decoder import JSONDecodeError
 from typing import Optional, Type, Union
 
-from src.app.errors import AppErrorType, AppSimpleError, AppApiError
+from src.app.opening_hours_app.errors import AppErrorType, AppSimpleError, AppApiError
 from src.app.models.common import Model
 from src.app.models.status import Status
 

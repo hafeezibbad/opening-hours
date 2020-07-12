@@ -1,7 +1,7 @@
 import pytest
 
 from src.app.models.validators import strings_are_equal
-from src.app.time_formatter import TimeFormatter
+from src.app.utils.time_formatter import TimeFormatter
 from tests.fixtures.time_formatter import DAY_TIMESTAMP_TO_HUMAN_READABLE, UNIX_TIMESTAMP_TO_HUMAN_READABLE, \
     FORMATTED_TIME_RANGES, FORMATTED_TIMES_FOR_DAY
 

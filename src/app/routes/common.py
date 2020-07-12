@@ -1,6 +1,6 @@
 from flask import Request
 
-from src.app.manager import AppManager
+from src.app.opening_hours_app.manager import AppManager
 
 
 def create_app_manager(incoming_request: Request) -> AppManager:

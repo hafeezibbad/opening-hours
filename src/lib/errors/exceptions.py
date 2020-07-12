@@ -4,7 +4,7 @@ import traceback
 
 from flask import request, g
 
-from src.app.errors import DataParsingError
+from src.app.opening_hours_app.errors import DataParsingError
 from src.lib.logging.utils import LOGGING
 from src.lib.response.utils import create_json_response
 from src.app.models.errors import ApiError

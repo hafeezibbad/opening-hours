@@ -1,8 +1,8 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 from src.app.models.constants import STATUS_OPEN, STATUS_CLOSE
 from src.app.models.validators import strings_are_equal
-from src.app.time_formatter import TimeFormatter
+from src.app.utils.time_formatter import TimeFormatter
 from src.app.models.opening_hours import OpeningHours, DayTimings
 
 
@@ -18,7 +18,7 @@ class OpeningHoursService:
         next_day_closing = None
         last_event_is_open = None
 
-        day_opening_timings = dict()
+        day_opening_timings: Dict[str, List[str]] = dict()
         timing_data: Optional[DayTimings] = None
         for timing_data in opening_hours.sorted_weekdays:
             if timing_data.timings is None:
@@ -43,12 +43,13 @@ class OpeningHoursService:
                         next_day_closing = closing_time
 
         if timing_data is not None:
+            # Edge case #4.
             if last_event_is_open and strings_are_equal(timing_data.weekday, 'sunday'):
                 day_opening_timings[timing_data.weekday].append(
                     TimeFormatter.get_formatted_time_range(opening_time, '')
                 )
 
-            # Edge case # 5: First event of week is a closing event
+            # Edge case # 5.
             elif next_day_closing and day_opening_timings.get(timing_data.weekday) is not None:
                 day_opening_timings[timing_data.weekday].append(
                     TimeFormatter.get_formatted_time_range(opening_time, next_day_closing)
