@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any, Union
 
 from pydantic import conint  # pylint: disable=no-name-in-module
 
-from src.app.opening_hours_app.errors import DataParsingError
+from src.app.errors import DataParsingError
 from src.app.utils.time_formatter import TimeFormatter
 
 from .common import Model
@@ -97,7 +97,7 @@ class ValidDayTimings(list):
 
 
 class DayTimings(Model):
-    weekday: WeekdayStr = None
+    weekday: WeekdayStr
     timings: Optional[ValidDayTimings] = None
 
 

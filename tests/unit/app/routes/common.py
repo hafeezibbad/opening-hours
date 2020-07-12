@@ -3,7 +3,7 @@ import unittest
 
 # pylint: disable=no-name-in-module
 from tests.fixtures.common import REQUEST_ID_STARTS_WITH, REQUEST_ID_LENGTH
-from tests.unit.configuration.config_test_utils import MOCK_CONFIGURATION_OBJ, MOCK_OS_ENVIRON
+from tests.unit.lib.configuration.config_test_utils import MOCK_CONFIGURATION_OBJ, MOCK_OS_ENVIRON
 
 
 with unittest.mock.patch.dict(os.environ, MOCK_OS_ENVIRON):

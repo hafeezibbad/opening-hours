@@ -2,7 +2,7 @@ import unittest.mock
 
 from flask import Response
 
-from tests.unit.configuration.config_test_utils import MOCK_CONFIGURATION_OBJ
+from tests.unit.lib.configuration.config_test_utils import MOCK_CONFIGURATION_OBJ
 from .common import BaseTests, method_will_raise_exception, exception_log_must_contain_valid_request_id, \
     exception_log_must_not_contain_request_id
 from .request_utils import get_status_request

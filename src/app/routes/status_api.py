@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint
 
 from src.lib.errors.exceptions import handle_and_log_service_exception
 from src.lib.response.utils import create_response_and_log
@@ -14,7 +14,7 @@ STATUS_API_PREFIX = '/api'
 @status_api.route('/status', methods=['GET'])
 def get_status():
     try:
-        manager = create_app_manager(incoming_request=request)
+        manager = create_app_manager()
         status: Status = manager.status()
 
         return create_response_and_log(

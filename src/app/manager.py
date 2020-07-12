@@ -1,8 +1,8 @@
 import json
 from json.decoder import JSONDecodeError
-from typing import Optional, Type, Union
+from typing import Type, Union
 
-from src.app.opening_hours_app.errors import AppErrorType, AppSimpleError, AppApiError
+from src.app.errors import AppErrorType, AppSimpleError, AppApiError
 from src.app.models.common import Model
 from src.app.models.status import Status
 
@@ -13,16 +13,15 @@ from src.app.service.opening_hours import OpeningHoursService
 
 
 class AppManager:
-    def __init__(self, requester_ip: Optional[str] = None):
-        self.requester_ip = requester_ip
+    def __init__(self):
         self.opening_hours_service = OpeningHoursService()
 
     def get_human_readable_opening_hours(self, request_data: dict) -> str:
-        opening_hours = self.__parse_request_data(parser=OpeningHoursDataParser, request_data=request_data)
+        opening_hours = self.parse_request_data(parser=OpeningHoursDataParser, request_data=request_data)
 
         return self.opening_hours_service.get_human_readable_opening_hours(opening_hours=opening_hours)
 
-    def __parse_request_data(self, parser: Type[RequestDataParser], request_data: dict) -> Type[Model]:
+    def parse_request_data(self, parser: Type[RequestDataParser], request_data: dict) -> Type[Model]:
         req_parser = parser(request_data=request_data)
         if not req_parser.is_valid():
             raise AppApiError(

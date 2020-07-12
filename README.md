@@ -2,6 +2,7 @@
 In this project, we have developed an API which accepts JSON-formatted opening hours of a restaurant in request
  payload, and returns the opening hours in human readable format.
 This API is developed using [Python](https://www.python.org/) programming language and [Flask](https://flask.palletsprojects.com/en/1.1.x/) web development framework.  
+The project follows the instructions and requirements provided in [assignment_description](https://github.com/hafeezibbad/opening-hours/blob/master/assignment_description.pdf).
 
 ## Table of contents
 * [Set up and run project locally](#set-up-and-run-project-locally)
@@ -80,14 +81,19 @@ $ STAGE="test" make app-offline
 ```bash
 $ make install-and-e2e-test
 ```
-By default the end-to-end tests use the deployment environment (STAGE) specified in [Makefile](https://github.com
-/hafeezibbad/opening-hours/blob/master/Makefile#L1), but you can run the tests against any other environment as ``STAGE="test" make install-and-e2e-test``.
+
+If e2e tests are failing, please make sure that server (``make app-offline``) is running.
+
+By default the e2e tests use the deployment environment (STAGE) specified in 
+[Makefile](https://github.com/hafeezibbad/opening-hours/blob/master/Makefile#L1), but you can run the tests against 
+any other environment as ``STAGE="test" make install-and-e2e-test``.
 If you have modified ``ServerPort`` and/or ``EndpointBaseUrl`` settings in configuration file, or you want to run e2e
  tests against another deployment, please run e2e tests as ``ENDPOINT_BASE_URL='<base_url>' make e2e-test``
- 
+Before choosing `ServerPort`, you can check if given port is already in use using command `nc -l <port-number>` 
+
 ---
 
-**Note**
+**NOTE**
 
 For the reset of this document, _event_, _timing_event_, _timing_entry_, or simply _timing_ refer to an entry with open
 /close time information, for example, ``{"type": "open", "value": 3600}``.
@@ -183,7 +189,7 @@ Sunday: 12 PM - 9 PM
 More example with request payload and expected response are given in [tests/fixtures/opening_hours.py](https://github.com/hafeezibbad/opening-hours/blob/master/tests/fixtures/opening_hours_data.py#L1-L251)
 Some edge cases for `/api/v1/opening-hours` endpoint are discussed in [Edge cases](#edge-cases) section. 
 
-##### [GET] /api/v1/status
+#### [GET] /api/v1/status
 This API also offers a health check endpoint to poll for whether or not the service is available. 
 The health check endpoint can be queried as 
 ```bash
@@ -492,7 +498,7 @@ curl --location --request POST 'http://localhost:3500/api/v1/opening-hours' \
 
 More examples for this case can be found in [tests/fixtures/opening_hours_data.py](https://github.com/hafeezibbad/opening-hours/blob/master/tests/fixtures/opening_hours_data.py#L352-L558)
 ### Case 4
-This case is related to [case 1](#case-1) and [case-3](#case-3). 
+This case is related to [Case 1](#case-1) and [Case 3](#case-3). 
 If current day is Sunday, and the last event is _open_, instead of raising an error about no closing time, we assume
  that there will be a closing time (as first entry) in the next week Monday .
 Following this decision, there are two choices for displaying human-readable opening times for _Sunday_
@@ -500,7 +506,7 @@ Following this decision, there are two choices for displaying human-readable ope
 2. We show open interval on last opening event on Sunday. 
 
 Following example shows that current implementation follows Choice #2, however, it should be possible to use choice #1 
-by commenting out [this code segment lines](https://github.com/hafeezibbad/opening-hours/blob/master/src/app/service/opening_hours.py#L47-L50).
+by commenting out [this code segment](https://github.com/hafeezibbad/opening-hours/blob/master/src/app/service/opening_hours.py#L47-L50).
 ```bash
 curl --location --request POST 'http://localhost:3500/api/v1/opening-hours' \
 --header 'Content-Type: application/json' \
@@ -526,8 +532,6 @@ curl --location --request POST 'http://localhost:3500/api/v1/opening-hours' \
 Sunday: 3 PM - 5 PM, 8 PM -
 ```
 The output following choice #1 will be ``Sunday: 3 PM - 5 PM``.
-
-More variations of this case are given in [tests/fixtures/opening_hours.py] 
 
 ### Case #5 
 If the first event of week is _close_, we ignore this event. 
@@ -590,15 +594,15 @@ Sunday: Closed
 </tr>
 </table>
 
-* Static analysis using [mypy](https://mypy.readthedocs.io/en/stable/introduction.html) has some errors. These do not
- directly affect the application functionality.   
 ## Improvements ideas
 * Test coverage (both unit test and end-to-end) can be improved.
 * Deployment using public cloud, such as [Heroku](https://www.heroku.com/), [AWS](https://aws.amazon.com/).
 * Run application in a docker container. 
-* Add rate limiting to the API to prevent (D)DoS attacks.
+* Add rate limiting to the API to prevent DoS attacks.
 * Add caching support for the API calls. 
 * Add Authentication and Authorization. [JSON web tokens](https://jwt.io/) are a good candidate.
+* Fuzzing input json structure
+
 ## Developer notes
 * In current implementation, ``type`` and ``value`` keys in timing events, for example, ``{"type": "open", "value
 ": 64800}``, are case-insensitive. If this behavior is not required, please comment out this line from [src/app
@@ -645,10 +649,6 @@ $ make analyze-code
 The default configuration for pylint checks can be overridden by modifying 
 [pylint-configuration file](https://github.com/hafeezibbad/music_app/blob/master/configs/pylint/pylint.cfg)
 
-You can also run static analysis using [mypy](https://mypy.readthedocs.io/en/stable/introduction.html)
-```bash
-$ make static-analysis
-```
 ### Running unit tests
 Unit tests are included in [tests/unit](https://github.com/hafeezibbad/opening-hours/tree/master/tests/unit) directory.
 Unit tests can be run using ``make test`` target.
@@ -718,7 +718,7 @@ Each log entry contains ``user-agent``, ``timestamp`` of event, and ``request_id
 			"name": "parse_opening_hours",
 			"type": "AppSimpleError"
 		},
-		"exception_traceback": "Traceback (most recent call last):\n  File \"/path/to/folder/opening-hours/src/app/manager.py\", line 43, in parse_request_data_as_json\n    return json.loads(request_data)\n  File \"/usr/lib/python3.6/json/__init__.py\", line 354, in loads\n    return _default_decoder.decode(s)\n  File \"/usr/lib/python3.6/json/decoder.py\", line 342, in decode\n    raise JSONDecodeError(\"Extra data\", s, end)\njson.decoder.JSONDecodeError: Extra data: line 1 column 9 (char 8)\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/path/to/folder/opening-hours/src/app/routes/opening_hours.py\", line 19, in parse_opening_hours\n    request_data: dict = manager.parse_request_data_as_json(request.get_data())\n  File \"/path/to/folder/opening-hours/src/app/manager.py\", line 47, in parse_request_data_as_json\n    message='Invalid JSON format provided in request body'\nsrc.app.errors.AppSimpleError\n"
+		"exception_traceback": "Traceback (most recent call last):\n  File \"/path/to/folder/opening-hours/src/app/test_manager.py\", line 43, in parse_request_data_as_json\n    return json.loads(request_data)\n  File \"/usr/lib/python3.6/json/__init__.py\", line 354, in loads\n    return _default_decoder.decode(s)\n  File \"/usr/lib/python3.6/json/decoder.py\", line 342, in decode\n    raise JSONDecodeError(\"Extra data\", s, end)\njson.decoder.JSONDecodeError: Extra data: line 1 column 9 (char 8)\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/path/to/folder/opening-hours/src/app/routes/opening_hours.py\", line 19, in parse_opening_hours\n    request_data: dict = manager.parse_request_data_as_json(request.get_data())\n  File \"/path/to/folder/opening-hours/src/app/test_manager.py\", line 47, in parse_request_data_as_json\n    message='Invalid JSON format provided in request body'\nsrc.app.errors.AppSimpleError\n"
 	},
 	"event": "OPENING HOURS APP_ERROR",
 	"timestamp": "2020-07-12T10:25:30.470386Z"

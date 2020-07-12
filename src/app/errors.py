@@ -1,4 +1,4 @@
-from typing import Union, Tuple
+from typing import Union, Tuple, Optional
 
 from src.app.models.errors import ApiError
 
@@ -48,7 +48,7 @@ class DataParsingError(AppError):
             self,
             title: str,
             detail: str,
-            source: Union[list, dict],
+            source: Optional[Union[list, dict]] = None,
             code: Tuple = AppErrorType.CANNOT_PARSE_OPENING_HOURS
     ) -> None:
         super(DataParsingError, self).__init__(code)

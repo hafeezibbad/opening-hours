@@ -26,6 +26,9 @@ class WeekdayStr(StrictNonEmptyStr):
 
     @classmethod
     def validate(cls, value):
+        if not isinstance(value, str):
+            raise ValueError('Invalid `type`: str expected, `{}` provided'.format(type(value)))
+
         if re.match(pattern=WEEKDAY_REGEX, string=value.strip(), flags=re.IGNORECASE) is None:
             raise ValueError('Invalid `type` provided for opening hours')
 

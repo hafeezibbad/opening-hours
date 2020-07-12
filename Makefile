@@ -6,6 +6,7 @@ PYTHON_RUNTIME ?= python3
 
 APP_CONFIG_FILE ?= ${PROJECT_ROOT_DIR}configs/app/${STAGE}/config.yml
 MIN_UNIT_TEST_COVERAGE ?=10
+ENDPOINT_BASE_URL ?= http://localhost:3500
 
 install-and-analyze: python-venv analyze
 
@@ -16,7 +17,6 @@ install-and-test: python-venv test
 install-and-run-e2e-test: python-venv e2e-test
 
 install-and-test-and-deploy-offline: install-and-analyze-and-test app-offline
-
 
 clean:
 	rm -rf ${VIRTUAL_ENV}
@@ -30,10 +30,6 @@ python-venv:
 analyze:
 	. ${VIRTUAL_ENV}/bin/activate && \
 	bash ${PROJECT_ROOT_DIR}scripts/analyze.sh -d "src scripts tests" -t tests
-
-static-analysis:
-	. ${VIRTUAL_ENV}/bin/activate && \
-	mypy ${PROJECT_ROOT_DIR}/src --config-file ${PROJECT_ROOT_DIR}/configs/mypy/mypy.ini --ignore-missing-imports
 
 test:
 	APP_CONFIG_FILE=${APP_CONFIG_FILE} \

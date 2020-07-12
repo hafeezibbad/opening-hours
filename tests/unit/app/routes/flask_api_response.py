@@ -22,5 +22,10 @@ class FlaskApiResponse(HttpResponse):
             self.body = dict()
             return
 
-        self.body = self.response.json
+        if self.headers.get('Content-Type') == 'application/json':
+            self.body = self.response.json
+
+        elif self.headers.get('Content-Type') == 'text/html; charset=utf-8':
+            self.body = self.response.data.decode('utf-8')
+
         self.body_parsed = True
