@@ -10,7 +10,7 @@ The project follows the instructions and requirements provided in [assignment_de
 * [Thoughts on JSON data](#thoughts-on-input-json)
 * [Edge cases](#edge-cases)
 * [Known issues](#known-issues)
-* [Improvement ideas](#improvements-ideas)
+* [Improvements](#improvements)
 * [Developer notes](#developer-notes)
 
 ## Set up and run project locally
@@ -594,7 +594,7 @@ Sunday: Closed
 </tr>
 </table>
 
-## Improvements ideas
+## Improvements
 * Test coverage (both unit test and end-to-end) can be improved.
 * Deployment using public cloud, such as [Heroku](https://www.heroku.com/), [AWS](https://aws.amazon.com/).
 * Run application in a docker container. 
@@ -602,6 +602,7 @@ Sunday: Closed
 * Add caching support for the API calls. 
 * Add Authentication and Authorization. [JSON web tokens](https://jwt.io/) are a good candidate.
 * Fuzzing input json structure
+* Resolving issues reported in static code analysis using [mypy](https://pypi.org/project/mypy/)
 
 ## Developer notes
 * In current implementation, ``type`` and ``value`` keys in timing events, for example, ``{"type": "open", "value
@@ -631,11 +632,23 @@ If your system default ``python3`` is ``python3.5`` or lower, please
 ```bash
 export PYTHON_RUNTIME=python3.6
 ```
-### Choice of Flask
-The choice of [flask](https://flask.palletsprojects.com/en/1.1.x/) as the framework for this project was motivated by
- the ease of development of flask. 
-The modular structure of makes flask lightweight and quick to prototype.
-Meanwhile, we can extend the application functionality using various modules supported to work with flask.   
+
+### Third-party libraries
+Following third-party libraries are used in current implementation
+1. [flask](https://flask.palletsprojects.com/en/1.1.x/) micro-framework is used for developing the API. It is
+ lightweight, easy to use, and supports various modules to extend application functionality as needed. 
+2. [structlog](https://pypi.org/project/structlog/) for structured logging. 
+3. [pydantic](https://pypi.org/project/pydantic/) for data validation and parsing python dictionaries in objects.
+4. [python-json-logger](https://pypi.org/project/python-json-logger/) to support logging in JSON format. 
+5. [PyYaml](https://pypi.org/project/PyYAML/) for parsing yaml files.
+6. [typing-extensions](https://pypi.org/project/typing-extensions/) for improved type-hinting support.
+7. [requests](https://pypi.org/project/requests/) for handling HTTP requests and responses in e2e tests.
+8. [diff-cover](https://pypi.org/project/diff-cover/) to find the number of lines missing test coverage.
+9. [pylint](https://pypi.org/project/pylint/) for static code analysis
+10. [pycodestyle](https://pypi.org/project/pycodestyle/) for checking python code style.
+11. [parameterized](https://pypi.org/project/parameterized/) to support parametrization in tests.
+12. [munch](https://pypi.org/project/munch/) for getting attribute style access to python dictionaries keys. 
+13. [mypy](https://pypi.org/project/mypy/) for static code analysis.
  
 ### Code analysis
 This project uses [pylint](https://pypi.org/project/pylint/) and [pycodestyle](https://pypi.org/project/pycodestyle/) 
@@ -647,7 +660,7 @@ $ make analyze-code
 ```
 
 The default configuration for pylint checks can be overridden by modifying 
-[pylint-configuration file](https://github.com/hafeezibbad/music_app/blob/master/configs/pylint/pylint.cfg)
+[pylint-configuration file](https://github.com/hafeezibbad/opening-hours/blob/master/configs/pylint/pylint.cfg)
 
 ### Running unit tests
 Unit tests are included in [tests/unit](https://github.com/hafeezibbad/opening-hours/tree/master/tests/unit) directory.

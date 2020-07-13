@@ -3,7 +3,7 @@ import json
 from src.app.models.opening_hours import OpeningHours
 from tests.fixtures.opening_hours_model_data import VALID_OPENING_HOURS
 
-TEST_USER_AGENT = "python-requests tests/musicapp"
+TEST_USER_AGENT = "python-requests tests/opening-hours"
 REQUEST_ID_STARTS_WITH = "0000-"
 REQUEST_ID_LENGTH = 37
 VALID_JSON_STRING = json.dumps({"key": "value"})

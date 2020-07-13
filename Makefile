@@ -35,7 +35,8 @@ test:
 	APP_CONFIG_FILE=${APP_CONFIG_FILE} \
 	. ${VIRTUAL_ENV}/bin/activate && \
 	pytest -vv ${TEST_TAG_PARAM} --junit-xml xunit.xml --cov src --cov-report xml tests/unit && \
-	diff-cover coverage.xml --fail-under=${MIN_UNIT_TEST_COVERAGE}
+	([ -d '.git' ] && diff-cover coverage.xml --fail-under=${MIN_UNIT_TEST_COVERAGE}) || \
+	 echo  "Can not run diff-cover because this is not a git repo"
 
 app-offline:
 	. ${VIRTUAL_ENV}/bin/activate && \
