@@ -1,5 +1,5 @@
 import json
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union
 
 from flask import request, Response
 from typing_extensions import Literal
@@ -20,11 +20,11 @@ class CustomJsonEncoder(json.JSONEncoder):
 
 
 def create_json_response(
-        message: str = None,
+        message: Optional[str] = None,
         status_code: int = 200,
-        data: Optional[Dict[str, Any]] = None,
+        data: Optional[dict] = None,
         extra_headers: Optional[Dict[str, Any]] = None,
-):
+) -> Response:
     data = data or dict()
     if message:
         data['message'] = message
@@ -43,7 +43,11 @@ def create_json_response(
     return response
 
 
-def create_text_response(data: str = '', extra_headers: dict = None, status_code: int = 200):
+def create_text_response(
+        data: Union[str, dict] = '',
+        extra_headers: Optional[Dict[str, Any]] = None,
+        status_code: int = 200
+) -> Response:
     response = Response(
         data,
         status=status_code
@@ -57,9 +61,9 @@ def create_text_response(data: str = '', extra_headers: dict = None, status_code
 
 def create_response_and_log(
         log_message: str,
-        message: str = None,
+        message: Optional[str] = None,
         status_code: int = 200,
-        data: str = None,
+        data: Optional[dict] = None,
         log_data: bool = False,
         extra_headers: Optional[Dict[str, Any]] = None,
         content_type: Literal['text', 'json'] = 'json'

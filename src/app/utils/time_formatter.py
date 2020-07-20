@@ -1,12 +1,12 @@
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 from pydantic import conint  # pylint: disable=no-name-in-module
 
 
 class TimeFormatter:
     @staticmethod
-    def get_human_readable_time_from_timestamp(timestamp: conint(ge=0, le=86399)) -> str:
+    def get_human_readable_time_from_timestamp(timestamp: conint(ge=0, le=86399)) -> str:  # type: ignore
         _time_resolution = "%-I"
         _dt = datetime.utcfromtimestamp(timestamp)
         if _dt.minute > 0:
@@ -17,7 +17,7 @@ class TimeFormatter:
         return _dt.strftime('{resolution} %p'.format(resolution=_time_resolution))
 
     @staticmethod
-    def get_formatted_time_range(opening_time: str, closing_time: str) -> str:
+    def get_formatted_time_range(opening_time: Optional[str], closing_time: Optional[str]) -> str:
         return "{opening_time} - {closing_time}".format(opening_time=opening_time, closing_time=closing_time)
 
     @staticmethod

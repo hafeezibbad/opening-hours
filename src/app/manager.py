@@ -31,7 +31,7 @@ class AppManager:
 
         return req_parser.get_model()
 
-    def parse_request_data_as_json(self, request_data: Union[bytes, dict]) -> dict:
+    def parse_request_data_as_json(self, request_data: Union[str, bytes, bytearray]) -> dict:
         if not request_data:
             raise AppSimpleError(
                 code=AppErrorType.REQUEST_BODY_EMPTY,

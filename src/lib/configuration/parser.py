@@ -11,7 +11,7 @@ class ConfigurationParser:
     SUPPORTED_TYPES = ['json', '.yml', '.yaml']
 
     def __init__(self):
-        self.config_data = dict()
+        self.config_data: dict = dict()
 
     def parse(self, file_path: str = None) -> dict:
         """
@@ -92,7 +92,7 @@ class ConfigurationParser:
             ConfigurationError.BAD_CONFIG_FILE: Invalid file
         """
         try:
-            with open(file_path, 'r') as data:
+            with open(file_path, 'r') as data:  # type: ignore
                 config_data = yaml.safe_load(data)
 
         except yaml.YAMLError:

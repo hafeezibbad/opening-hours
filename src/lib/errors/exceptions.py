@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any, Dict
 import sys
 import traceback
 
@@ -28,17 +28,20 @@ class GenericError(Exception):
         self.verbose_message = verbose_message
 
 
-def get_exception_details(ex):
+def get_exception_details(ex) -> Dict[str, Any]:
     ex_type, ex_value, ex_traceback = sys.exc_info()    # provides info for most recent (if any) by default
 
     traceback_out = traceback.format_exc()
 
-    traceback_details = {
-        'filename': ex_traceback.tb_frame.f_code.co_filename,
-        'lineno': ex_traceback.tb_lineno,
-        'name': ex_traceback.tb_frame.f_code.co_name,
-        'type': ex_type.__name__,
-    }
+    traceback_details: dict = {}
+    if ex_type:
+        traceback_details.update({'type': ex_type.__name__})
+    if ex_traceback:
+        traceback_details.update({
+            'filename': ex_traceback.tb_frame.f_code.co_filename,
+            'lineno': ex_traceback.tb_lineno,
+            'name': ex_traceback.tb_frame.f_code.co_name
+        })
 
     ex_message = str(ex)
     if hasattr(ex, 'message'):
@@ -55,11 +58,9 @@ def get_exception_details(ex):
 
 
 def handle_and_log_flask_exception(ex, exception_details: bool = True):
-
-    if exception_details is False:
-        exception_details = None
-    else:
-        exception_details = get_exception_details(ex)
+    exceptional_trace: Optional[Dict[str, Any]] = None
+    if exception_details is True:
+        exceptional_trace = get_exception_details(ex)
 
     http_status = ex.code or 500
     message = ex.name
@@ -70,7 +71,7 @@ def handle_and_log_flask_exception(ex, exception_details: bool = True):
         request_path=request.path,
         message="Flask HTTP exception",
         status_code=http_status,
-        exception_details=exception_details,
+        exception_details=exceptional_trace,
         request_id=g.request_id
     )
 

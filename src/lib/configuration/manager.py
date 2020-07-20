@@ -1,5 +1,5 @@
 
-from typing import Optional
+from typing import Optional, Type
 
 from src.lib.configuration.app_configuration import AppConfiguration
 from src.lib.configuration.errors import ConfigurationError, ConfigurationErrorType
@@ -10,7 +10,7 @@ class ConfigurationManager:
 
     def __init__(
             self,
-            configuration_type: AppConfiguration = AppConfiguration,
+            configuration_type: Type[AppConfiguration] = AppConfiguration,
             default_config_values: dict = None
     ):
         self.configuration_parser = ConfigurationParser()

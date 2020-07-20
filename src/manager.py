@@ -2,6 +2,8 @@ import os
 import sys
 
 # PROJECT_ROOT_DIR variable is set in Makefile
+from typing import Optional
+
 sys.path.append(os.environ['PROJECT_ROOT_DIR'])
 
 # pylint: disable=wrong-import-position
@@ -11,7 +13,9 @@ from src.lib.configuration.utils import load_configuration_from_yaml_file  # noq
 
 
 # pylint: disable=invalid-name
-app_config: AppConfiguration = load_configuration_from_yaml_file(os.environ['APP_CONFIG_FILE'])
+app_config: Optional[AppConfiguration] = load_configuration_from_yaml_file(os.environ['APP_CONFIG_FILE'])
 
-
-app.run(port=app_config.ServerPort, debug=app_config.Debug)
+if app_config is not None:
+    app.run(port=app_config.ServerPort, debug=app_config.Debug)
+else:
+    raise RuntimeError('Cannot load configuration')

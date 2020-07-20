@@ -30,7 +30,7 @@ class ApiRequest(ABC):
 
     def update_headers(
             self,
-            request_id: Optional[constr(regex=REQUEST_ID_PATTERN)] = None,
+            request_id: Optional[constr(regex=REQUEST_ID_PATTERN)] = None,  # type: ignore
             additional_headers: Optional[Dict[str, str]] = None,
             if_match_header: Optional[str] = None,
             if_none_match_header: Optional[str] = None,
@@ -64,7 +64,7 @@ class E2EApiRequest(ApiRequest):
             base_url: str,
             request_handler: Type[Callable] = None,
             expected_response: Type[HttpResponse] = None,
-            request_id: Optional[constr(regex=REQUEST_ID_PATTERN)] = None,
+            request_id: Optional[constr(regex=REQUEST_ID_PATTERN)] = None,  # type: ignore
             additional_headers: Optional[Dict[str, str]] = None,
             user_agent: Optional[str] = None
     ):
@@ -98,7 +98,7 @@ class E2EApiRequest(ApiRequest):
             if_match_header=if_match_header,
             if_none_match_header=if_none_match_header
         )
-        response_dict = self.request_handler(
+        response_dict = self.request_handler(  # type: ignore
             url=full_url,
             method=method,
             headers=self.headers,
@@ -106,7 +106,7 @@ class E2EApiRequest(ApiRequest):
             params=params
         )
 
-        return self.expected_response(response_dict)
+        return self.expected_response(response_dict)  # type: ignore
 
 
 class FlaskApiRequest(ApiRequest):
@@ -156,29 +156,29 @@ class FlaskApiRequest(ApiRequest):
             data_args['data'] = data
 
         if method.lower() == 'post':
-            response = self.request_handler().post(
+            response = self.request_handler().post(  # type: ignore
                 full_url,
                 headers=self.headers,
                 **data_args
             )
         elif method.lower() == 'delete':
-            response = self.request_handler().delete(
+            response = self.request_handler().delete(  # type: ignore
                 full_url,
                 headers=self.headers
             )
         elif method.lower() == 'get':
-            response = self.request_handler().get(
+            response = self.request_handler().get(  # type: ignore
                 full_url,
                 headers=self.headers
             )
         elif method.lower() == 'put':
-            response = self.request_handler().put(
+            response = self.request_handler().put(  # type: ignore
                 full_url,
                 headers=self.headers,
                 **data_args
             )
         elif method.lower() == 'patch':
-            response = self.request_handler().patch(
+            response = self.request_handler().patch(  # type: ignore
                 full_url,
                 headers=self.headers,
                 **data_args
@@ -186,4 +186,4 @@ class FlaskApiRequest(ApiRequest):
         else:
             raise NotImplementedError('Unsupported request method `{}`'.format(method))
 
-        return self.expected_response(response)
+        return self.expected_response(response)  # type: ignore

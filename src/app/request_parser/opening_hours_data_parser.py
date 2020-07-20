@@ -15,7 +15,7 @@ class OpeningHoursDataParser(RequestDataParser):
     def is_valid(self):
         return not self.api_error
 
-    def __validate(self, data: dict):
+    def __validate(self, data: dict) -> None:
         try:
             opening_hours_data = dict()
 

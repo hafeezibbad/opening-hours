@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Optional, Union
 
 from flask import request
 import structlog
@@ -13,7 +13,7 @@ LOGGING = structlog.get_logger(__name__)
 def log_request(
         log_message: str = '',
         log_data: bool = False,
-        request_data: Optional[dict] = None,
+        request_data: Optional[Union[bytes, dict]] = None,
         request_args: Optional[dict] = None
 ):
     if request_data is None:

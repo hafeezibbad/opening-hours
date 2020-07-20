@@ -1,4 +1,4 @@
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any
 
 from src.app.models.constants import STATUS_OPEN, STATUS_CLOSE
 from src.app.models.validators import strings_are_equal
@@ -18,8 +18,8 @@ class OpeningHoursService:
         next_day_closing = None
         last_event_is_open = None
 
-        day_opening_timings: Dict[str, List[str]] = dict()
-        timing_data: Optional[DayTimings] = None
+        day_opening_timings: dict = dict()
+        timing_data: DayTimings
         for timing_data in opening_hours.sorted_weekdays:
             if timing_data.timings is None:
                 continue
@@ -37,7 +37,7 @@ class OpeningHoursService:
                     if opening_time is not None:
                         day_opening_timings[opening_day].append(
                             TimeFormatter.get_formatted_time_range(opening_time, closing_time)
-                        )
+                        )  # type: ignore
 
                     else:
                         next_day_closing = closing_time

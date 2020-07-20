@@ -17,9 +17,9 @@ class AppErrorType:
 
 
 class AppError(Exception):
-    code: Tuple = None
-    http_status: int = None
-    event_name: str = None
+    code: Tuple
+    http_status: int
+    event_name: str
 
     def __init__(self, code: Tuple) -> None:
         self.code, self.http_status, self.event_name = code
@@ -27,18 +27,18 @@ class AppError(Exception):
 
 class AppSimpleError(AppError):
     """For simple errors where message and status code is enough"""
-    message: str = None
+    message: Optional[str] = None
 
-    def __init__(self, code: Tuple, message: str) -> None:
+    def __init__(self, code: Tuple, message: Optional[str]) -> None:
         super(AppSimpleError, self).__init__(code)
         self.message = message
 
 
 class AppApiError(AppError):
     """For more complex API errors raised from validation failures"""
-    api_error: ApiError = None
+    api_error: Optional[ApiError] = None
 
-    def __init__(self, code: Tuple, api_error: ApiError) -> None:
+    def __init__(self, code: Tuple, api_error: Optional[ApiError]) -> None:
         super(AppApiError, self).__init__(code)
         self.api_error = api_error
 

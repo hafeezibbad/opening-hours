@@ -5,8 +5,11 @@ PROJECT_ROOT_DIR := $(dir $(MAKEFILE_PATH))
 PYTHON_RUNTIME ?= python3
 
 APP_CONFIG_FILE ?= ${PROJECT_ROOT_DIR}configs/app/${STAGE}/config.yml
+MYPY_CONFIG_FILE ?= ${PROJECT_ROOT_DIR}configs/mypy/mypy.ini
 MIN_UNIT_TEST_COVERAGE ?=10
 ENDPOINT_BASE_URL ?= http://localhost:3500
+
+analyze: analyze-code static-analysis-with-mypy
 
 install-and-analyze: python-venv analyze
 
@@ -27,9 +30,13 @@ python-venv:
 	${PYTHON_RUNTIME} -m pip install -r requirements-base.txt && \
 	${PYTHON_RUNTIME} -m pip install -r requirements-dev.txt
 
-analyze:
+analyze-code:
 	. ${VIRTUAL_ENV}/bin/activate && \
 	bash ${PROJECT_ROOT_DIR}scripts/analyze.sh -d "src scripts tests" -t tests
+
+static-analysis-with-mypy:
+	. ${VIRTUAL_ENV}/bin/activate && \
+	mypy src --config-file ${MYPY_CONFIG_FILE}
 
 test:
 	APP_CONFIG_FILE=${APP_CONFIG_FILE} \

@@ -33,7 +33,7 @@ class OpeningStatusStr(str):
 
 class TimeEntry(Model):
     status: OpeningStatusStr
-    value: conint(ge=0, le=86399)
+    value: conint(ge=0, le=86399)  # type: ignore
 
     def dict(self, *args, **kwargs) -> Dict[str, Union[int, str]]:
         return {
@@ -115,15 +115,15 @@ class OpeningHours(Model):
         return [self.monday, self.tuesday, self.wednesday, self.thursday, self.friday, self.saturday, self.sunday]
 
     def raise_parsing_error(self, title: str, error_data: dict, source_pointer: Any):
-        error_detail = '`{last_day}: {last_time}` has no {timing_event} time'
-        if error_data:
-            error_detail: str = '`{last_day}: {last_time}` has no {timing_event} time{suffix}'.format(
-                last_day=error_data.get('last_day', '').title(),
-                # FIXME: Here we can actually give the user provided value
-                last_time=TimeFormatter.get_human_readable_time_from_timestamp(error_data.get('last_time', 0)),
-                timing_event=error_data.get('timing_event', ''),
-                suffix=error_data.get('error_msg_suffix', '')
-            )
+        error_data = error_data or {}
+
+        error_detail: str = '`{last_day}: {last_time}` has no {timing_event} time{suffix}'.format(
+            last_day=error_data.get('last_day', '').title(),
+            # FIXME: Here we can actually give the user provided value
+            last_time=TimeFormatter.get_human_readable_time_from_timestamp(error_data.get('last_time', 0)),
+            timing_event=error_data.get('timing_event', ''),
+            suffix=error_data.get('error_msg_suffix', '')
+        )
 
         raise DataParsingError(
             title=title,

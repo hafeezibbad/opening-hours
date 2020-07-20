@@ -25,8 +25,8 @@ class RequestDataParserABC(ABC):
 class RequestDataParser(RequestDataParserABC):
     def __init__(self, request_data: dict) -> None:
         self.errors: List[Dict[str, Any]] = []
-        self.model = None
-        self.api_error = None
+        self.model: Optional[Model] = None
+        self.api_error: Optional[ApiError] = None
         self.request_data = request_data
 
     def get_api_error(self) -> Optional[ApiError]:

@@ -602,7 +602,6 @@ Sunday: Closed
 * Add caching support for the API calls. 
 * Add Authentication and Authorization. [JSON web tokens](https://jwt.io/) are a good candidate.
 * Fuzzing input json structure
-* Resolving issues reported in static code analysis using [mypy](https://pypi.org/project/mypy/)
 
 ## Developer notes
 * In current implementation, ``type`` and ``value`` keys in timing events, for example, ``{"type": "open", "value
@@ -651,13 +650,17 @@ Following third-party libraries are used in current implementation
 13. [mypy](https://pypi.org/project/mypy/) for static code analysis.
  
 ### Code analysis
-This project uses [pylint](https://pypi.org/project/pylint/) and [pycodestyle](https://pypi.org/project/pycodestyle/) 
-guidelines to check code styling and formatting issues. 
-After making code changes, code-styling and basic analysis checks can be performed as 
+This project uses [pylint](https://pypi.org/project/pylint/), [pycodestyle](https://pypi.org/project/pycodestyle/),
+ and [mypy](https://pypi.org/project/mypy/) to check python code style, and run static analysis. 
+After making code changes, code-styling and analysis checks can be performed as 
 
 ```bash
-$ make analyze-code
+$ make analyze
 ```
+
+You can run [pylint](https://pypi.org/project/pylint/), [pycodestyle](https://pypi.org/project/pycodestyle/) 
+separately by running ``make analyze-code``, and static analysis with [mypy](https://pypi.org/project/mypy/) using
+ ``make static-analysis-with-mypy``.
 
 The default configuration for pylint checks can be overridden by modifying 
 [pylint-configuration file](https://github.com/hafeezibbad/opening-hours/blob/master/configs/pylint/pylint.cfg)
@@ -677,7 +680,7 @@ You can specify minimum unit test coverage for new changes by modifying ``MIN_UN
 All responses from opening-hours API return a request ID in X-REQUEST-ID response header 
 This request ID uniquely identifies a single request in logs, and is helpful for debugging purposes. 
 Clients can pass request ID in X-REQUEST-ID header to any request and assuming it is valid ([pattern
-](https://github.com/hafeezibbad/opening-hours/blob/master/src/lib/request_id/validator.py#L5), it
+](https://github.com/hafeezibbad/opening-hours/blob/master/src/lib/request_id/validator.py#L5)), it
  will be used throughout the request, and returned in response as well. 
 In case request ID is invalid or missing from request, it will be auto-generated and returned on each response.
 ### Logging
